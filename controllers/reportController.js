@@ -4,7 +4,7 @@ const getSummaryReport = async (req, res) => {
   try {
     const total = await Land.countDocuments();
     const encroached = await Land.countDocuments({ encroached: true });
-    const disputed = await Land.countDocuments({ dispute: true });
+    const disputed = await Land.countDocuments({ status: "disputed" });
 
     const totalValue = await Land.aggregate([
       { $group: { _id: null, totalValue: { $sum: "$value" } } },
