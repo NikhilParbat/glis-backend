@@ -5,11 +5,13 @@ const {
   addLand,
   getLandById,
   editLand,
+  deleteLand,
 } = require("../controllers/landController");
 
 router.get("/", getAllLands);
 router.post("/", addLand);
 router.get("/:id", getLandById);
 router.put("/:id", editLand);
+router.delete("/:id", deleteLand);
 
 module.exports = router;
