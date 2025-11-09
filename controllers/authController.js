@@ -41,6 +41,31 @@ const loginUser = async (req, res) => {
   }
 };
 
+// ======================== EDIT USER ============================
+const editUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = { ...req.body };
+
+    // Hash the password if it’s being updated
+    if (updates.password) {
+      updates.password = await bcrypt.hash(updates.password, 10);
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(id, updates, {
+      new: true,
+      runValidators: true,
+    }).select("-password"); // Exclude password from response
+
+    if (!updatedUser)
+      return res.status(404).json({ message: "User not found" });
+
+    res.json({ message: "User updated successfully", user: updatedUser });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // ======================== DELETE USER ==========================
 const deleteUser = async (req, res) => {
   try {
@@ -68,6 +93,7 @@ const getAllUsers = async (req, res) => {
 module.exports = {
   registerUser,
   loginUser,
+  editUser,
   deleteUser,
   getAllUsers,
 };
